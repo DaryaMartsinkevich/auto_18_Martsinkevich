@@ -74,3 +74,4 @@ def test_delete_cookie(driver_firefox):
     assert driver_firefox.find_element(By.CSS_SELECTOR, '[id="login"]')
 
     driver_firefox.save_screenshot('test_delete_cookie2.png')
+
