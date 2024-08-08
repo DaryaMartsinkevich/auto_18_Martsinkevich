@@ -3,6 +3,7 @@ import time
 
 import pytest
 from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.by import By
@@ -23,19 +24,25 @@ def driver():
     driver.maximize_window()
     yield driver
 
-    # driver.close()
-    driver.quit()
-
-def test_selenium_assert():
-    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
-    driver.maximize_window()
-    driver.get(URL)
-    element = driver.find_element(By.CSS_SELECTOR, '.selenium-button.selenium-webdriver')
-    element.click()
-    time.sleep(2)
-
-    assert driver.current_url == 'https://www.selenium.dev/documentation/webdriver/'
-
     driver.close()
     driver.quit()
+
+def test_selenium_assert(driver):
+
+    driver.get(URL)
+    element = driver.find_element(By.CSS_SELECTOR, '[class="d-flex justify-content-center td-box--100 pt-5"]')
+    assert element
+
+    time.sleep(5)
+    driver.execute_script("arguments[0].scrollIntoView()", element)
+
+    element = driver.find_element(By.XPATH, "//*[@class='selenium-button-container']")
+    assert element
+
+    time.sleep(2)
+    element.click()
+    time.sleep(2)
+    driver.save_screenshot('selenium.png')
+    assert driver.current_url == 'https://www.selenium.dev/documentation/webdriver/'
+
 
